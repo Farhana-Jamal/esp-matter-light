@@ -5,6 +5,6 @@
 #include "button_gpio.h"
 #include "iot_button.h"
 
-void button_setup();
+void firmware_update_button_setup();
 
 #endif

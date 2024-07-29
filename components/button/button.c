@@ -13,10 +13,10 @@ static button_handle_t btn_handle = 0;
 static void button_long_press_start_cb(void *arg, void *data)
 {
     ESP_LOGI(TAG,"BTN: BUTTON_LONG_PRESS_START");
-    ota_task();
+    xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);
 }
 
-void button_setup(void)
+void firmware_update_button_setup(void)
 {
     // Configuration for the button
     button_config_t btn_cfg = {

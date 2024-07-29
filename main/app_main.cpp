@@ -152,7 +152,8 @@ extern "C" void app_main()
     /* Initialize the ESP NVS layer */
     nvs_flash_init();
 
-    button_setup();
+    ota_setup();
+    firmware_update_button_setup();
 
     /* Initialize driver */
     app_driver_handle_t light_handle = app_driver_light_init();

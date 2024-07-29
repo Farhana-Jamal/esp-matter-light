@@ -1,3 +1,4 @@
+#include "protocol_examples_common.h"
 #include "ota.h"
 
 #define HASH_LEN 32
@@ -109,7 +110,7 @@ static void get_sha256_of_partitions(void)
     print_sha256(sha_256, "SHA-256 for current firmware: ");
 }
 
-void ota_task(void)
+void ota_setup(void)
 {
     // Initialize NVS.
     esp_err_t err = nvs_flash_init();
@@ -138,5 +139,4 @@ void ota_task(void)
      * and hence timings for overall OTA operation.
      */
     esp_wifi_set_ps(WIFI_PS_NONE);
-    xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);
 }
