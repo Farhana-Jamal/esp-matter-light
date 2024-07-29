@@ -5,6 +5,14 @@
 #include "button_gpio.h"
 #include "iot_button.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 void firmware_update_button_setup();
+#ifdef __cplusplus
+}
+#endif
 
 #endif

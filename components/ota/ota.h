@@ -18,7 +18,16 @@
 #include <sys/socket.h>
 #include "esp_wifi.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #define CONFIG_EXAMPLE_FIRMWARE_UPGRADE_URL      "https://192.168.0.3:8070/hello_world.bin"
 
 void ota_setup(void);
 void simple_ota_example_task(void *pvParameter);
+
+#ifdef __cplusplus
+}
+#endif

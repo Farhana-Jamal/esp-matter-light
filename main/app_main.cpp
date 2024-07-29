@@ -24,8 +24,8 @@
 #include <app/server/CommissioningWindowManager.h>
 #include <app/server/Server.h>
 
-#include "button.h"
-#include "ota.h"
+#include <button.h>
+#include <ota.h>
 
 static const char *TAG = "app_main";
 uint16_t light_endpoint_id = 0;
