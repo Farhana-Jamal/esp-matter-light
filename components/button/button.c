@@ -1,9 +1,3 @@
-#include "esp_ota_ops.h"
-#include "esp_system.h"
-#include "esp_partition.h"
-#include "esp_log.h"
-#include "button_gpio.h"
-#include "iot_button.h"
 #include "button.h"
 #include "ota.h"
 
