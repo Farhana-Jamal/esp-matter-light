@@ -24,6 +24,8 @@
 #include <app/server/CommissioningWindowManager.h>
 #include <app/server/Server.h>
 
+#include "button.h"
+
 static const char *TAG = "app_main";
 uint16_t light_endpoint_id = 0;
 
@@ -149,6 +151,8 @@ extern "C" void app_main()
 
     /* Initialize the ESP NVS layer */
     nvs_flash_init();
+
+    button_setup();
 
     /* Initialize driver */
     app_driver_handle_t light_handle = app_driver_light_init();
