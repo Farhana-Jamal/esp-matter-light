@@ -1,9 +1,16 @@
+#include "esp_ota_ops.h"
+#include "esp_system.h"
+#include "esp_partition.h"
+#include "esp_log.h"
+#include "button_gpio.h"
+#include "iot_button.h"
 #include "button.h"
 #include "ota.h"
 
 #define BUTTON_GPIO   5
 #define LONG_PRESS_TIME_MS 7000 // 7 seconds
 
+static const char* TAG = "Button";
 
 // Variable to store button handle
 static button_handle_t btn_handle = 0;
@@ -15,7 +22,7 @@ static void button_long_press_start_cb(void *arg, void *data)
     ota_task();
 }
 
-static void button_setup(void)
+void button_setup(void)
 {
     // Configuration for the button
     button_config_t btn_cfg = {
