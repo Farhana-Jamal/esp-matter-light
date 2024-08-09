@@ -13,6 +13,7 @@ set(req     driver
             esp_netif
             nvs_flash
             esp_wifi
+            mbedtls
             espressif__button)
                    
 idf_component_register( SRC_DIRS ${src_dirs} 
