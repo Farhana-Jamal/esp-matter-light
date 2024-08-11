@@ -1,7 +1,6 @@
 #include "button.h"
-#include "ota.h"
 
-#define BUTTON_GPIO   GPIO_NUM_5
+#define BUTTON_GPIO   GPIO_NUM_5          
 #define LONG_PRESS_TIME_MS 7000          // 7 seconds
 
 static const char* TAG = "Button";
@@ -12,10 +11,13 @@ static button_handle_t btn_handle = 0;
 // Callback function for the start of a long button press
 static void button_long_press_start_cb(void *arg, void *data)
 {
-    ESP_LOGI(TAG,"BTN: BUTTON_LONG_PRESS_START");
+    ESP_LOGI(TAG,"Firmware update button pressed. Preparing to start OTA update...");
+
+    // Create a task to handle the OTA update
     xTaskCreate(&ota_update_task, "ota_update_task", 8192, NULL, 5, NULL);
 }
 
+// Function for Firmware update button setup
 void firmware_update_btn_setup(void)
 {
     // Configuration for the button
@@ -30,5 +32,7 @@ void firmware_update_btn_setup(void)
 
     // Create and configure the button
     btn_handle = iot_button_create(&btn_cfg);
+
+    // Register the callback function for the long press start event
     iot_button_register_cb(btn_handle, BUTTON_LONG_PRESS_START, button_long_press_start_cb, NULL);
 }

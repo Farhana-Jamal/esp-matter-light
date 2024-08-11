@@ -1,14 +1,12 @@
-#include "protocol_examples_common.h"
 #include "ota.h"
 
-#define HASH_LEN 32
 
 static const char *TAG = "OTA";
 extern const uint8_t server_cert_pem_start[] asm("_binary_ca_cert_pem_start");
 extern const uint8_t server_cert_pem_end[] asm("_binary_ca_cert_pem_end");
 
-#define OTA_URL_SIZE 256
 
+// This function handles HTTP events during the OTA process.
 esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 {
     switch (evt->event_id) {
@@ -40,38 +38,6 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
     return ESP_OK;
 }
 
-void ota_update_task(void *pvParameter)
-{
-    
-    esp_http_client_config_t config = {
-        .url = CONFIG_EXAMPLE_FIRMWARE_UPGRADE_URL,
-#ifdef CONFIG_EXAMPLE_USE_CERT_BUNDLE
-        .crt_bundle_attach = esp_crt_bundle_attach,
-#else
-        .cert_pem = (char *)server_cert_pem_start,
-#endif /* CONFIG_EXAMPLE_USE_CERT_BUNDLE */
-        .event_handler = _http_event_handler,
-        .keep_alive_enable = true,
-    };
-
-    esp_https_ota_config_t ota_config = {
-        .http_config = &config,
-    };
-    ESP_LOGI(TAG, "Attempting to download update from %s", config.url);
-    vTaskDelay(1000/portTICK_PERIOD_MS);
-
-    esp_err_t ret = esp_https_ota(&ota_config);
-    if (ret == ESP_OK) {
-        ESP_LOGI(TAG, "OTA Succeed, Rebooting...");
-        esp_restart();
-    } else {
-        ESP_LOGE(TAG, "Firmware upgrade failed");
-    }
-    while (1) {
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-    }
-    vTaskDelete(NULL);
-}
 
 static void print_sha256(const uint8_t *image_hash, const char *label)
 {
@@ -83,6 +49,7 @@ static void print_sha256(const uint8_t *image_hash, const char *label)
     ESP_LOGI(TAG, "%s %s", label, hash_print);
 }
 
+// This function calculates and prints the SHA-256 hash of the bootloader and the currently running firmware.
 static void get_sha256_of_partitions(void)
 {
     uint8_t sha_256[HASH_LEN] = { 0 };
@@ -100,6 +67,45 @@ static void get_sha256_of_partitions(void)
     print_sha256(sha_256, "SHA-256 for current firmware: ");
 }
 
+void ota_update_task(void *pvParameter)
+{
+    // Configure the HTTP client for the OTA update
+    esp_http_client_config_t config = {
+        .url = CONFIG_EXAMPLE_FIRMWARE_UPGRADE_URL,
+#ifdef CONFIG_EXAMPLE_USE_CERT_BUNDLE
+        .crt_bundle_attach = esp_crt_bundle_attach,
+#else
+        .cert_pem = (char *)server_cert_pem_start,
+#endif /* CONFIG_EXAMPLE_USE_CERT_BUNDLE */
+        .event_handler = _http_event_handler,
+        .keep_alive_enable = true,
+    };
+
+    // configure OTA
+    esp_https_ota_config_t ota_config = {
+        .http_config = &config,
+    };
+    ESP_LOGI(TAG, "Attempting to download update from %s", config.url);
+    vTaskDelay(1000/portTICK_PERIOD_MS);
+
+    // START the OTA update
+    esp_err_t ret = esp_https_ota(&ota_config);
+    if (ret == ESP_OK) {
+        ESP_LOGI(TAG, "OTA Succeed, Rebooting...");
+        esp_restart();
+    } else {
+        ESP_LOGE(TAG, "Firmware upgrade failed");
+    }
+
+    
+    while (1) {
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+    vTaskDelete(NULL);
+}
+
+
+// This function sets up the environment necessary for the OTA update.
 void ota_setup(void)
 {
     // Initialize NVS.
@@ -114,6 +120,7 @@ void ota_setup(void)
     }
     ESP_ERROR_CHECK(err);
 
+    // Calculate and print the SHA-256 hashes of the bootloader and the currently running firmware
     get_sha256_of_partitions();
 
     ESP_ERROR_CHECK(esp_netif_init());

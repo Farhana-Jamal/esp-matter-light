@@ -3,3 +3,4 @@
 .vscode
 .devcontainer
 sdkconfig.old
+!Kconfig.projbuild

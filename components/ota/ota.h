@@ -17,12 +17,15 @@
 #include "nvs_flash.h"
 #include <sys/socket.h>
 #include "esp_wifi.h"
+#include "protocol_examples_common.h"
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
+#define OTA_URL_SIZE 256
+#define HASH_LEN 32
 
 void ota_setup(void);
 void ota_update_task(void *pvParameter);
