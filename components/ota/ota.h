@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "freertos/FreeRTOS.h"
@@ -26,7 +25,7 @@ extern "C"
 
 
 void ota_setup(void);
-void simple_ota_example_task(void *pvParameter);
+void ota_update_task(void *pvParameter);
 
 #ifdef __cplusplus
 }

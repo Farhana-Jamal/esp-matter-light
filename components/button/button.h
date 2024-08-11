@@ -10,7 +10,8 @@ extern "C"
 {
 #endif
 
-void firmware_update_button_setup();
+void firmware_update_btn_setup();
+
 #ifdef __cplusplus
 }
 #endif

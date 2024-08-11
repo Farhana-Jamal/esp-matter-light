@@ -154,7 +154,7 @@ extern "C" void app_main()
     nvs_flash_init();
 
     ota_setup();
-    firmware_update_button_setup();
+    firmware_update_btn_setup();
 
     /* Initialize driver */
     app_driver_handle_t light_handle = app_driver_light_init();

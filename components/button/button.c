@@ -1,8 +1,8 @@
 #include "button.h"
 #include "ota.h"
 
-#define BUTTON_GPIO   5
-#define LONG_PRESS_TIME_MS 7000 // 7 seconds
+#define BUTTON_GPIO   GPIO_NUM_5
+#define LONG_PRESS_TIME_MS 7000          // 7 seconds
 
 static const char* TAG = "Button";
 
@@ -13,10 +13,10 @@ static button_handle_t btn_handle = 0;
 static void button_long_press_start_cb(void *arg, void *data)
 {
     ESP_LOGI(TAG,"BTN: BUTTON_LONG_PRESS_START");
-    xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);
+    xTaskCreate(&ota_update_task, "ota_update_task", 8192, NULL, 5, NULL);
 }
 
-void firmware_update_button_setup(void)
+void firmware_update_btn_setup(void)
 {
     // Configuration for the button
     button_config_t btn_cfg = {

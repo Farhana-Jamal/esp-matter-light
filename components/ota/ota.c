@@ -40,9 +40,9 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
     return ESP_OK;
 }
 
-void simple_ota_example_task(void *pvParameter)
+void ota_update_task(void *pvParameter)
 {
-    ESP_LOGI(TAG, "Starting OTA example task");
+    
     esp_http_client_config_t config = {
         .url = CONFIG_EXAMPLE_FIRMWARE_UPGRADE_URL,
 #ifdef CONFIG_EXAMPLE_USE_CERT_BUNDLE
@@ -58,7 +58,8 @@ void simple_ota_example_task(void *pvParameter)
         .http_config = &config,
     };
     ESP_LOGI(TAG, "Attempting to download update from %s", config.url);
-    vTaskDelay(2000/portTICK_PERIOD_MS);
+    vTaskDelay(1000/portTICK_PERIOD_MS);
+
     esp_err_t ret = esp_https_ota(&ota_config);
     if (ret == ESP_OK) {
         ESP_LOGI(TAG, "OTA Succeed, Rebooting...");
